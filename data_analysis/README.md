@@ -23,7 +23,7 @@ Run:
 ## Next features
 
 * add command line parser
-* align zero-points - **DONE**
+* [**DONE**] align zero-points 
 * advanced align zero-point
 * handle multi region per country
 * ...
