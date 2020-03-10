@@ -1,7 +1,9 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 COUNTRY_REGION_LIST = ["Switzerland", "Italy"]
+ALIGN_ZERO = False
 
 
 def load_data_from_source(source='csse'):
@@ -38,7 +40,23 @@ def clean_data(df, country_region_list=[], align_zero=False):
         raise ValueError("Empty country/region list.")
 
     if align_zero:
-        raise NotImplementedError("Feature to be implemented.")
+
+        support_df = subset[subset > 0]
+        support_df = support_df.dropna(axis=0, how='all')
+
+        ref_valid_index = support_df.first_valid_index()
+
+        columns_suffix = []
+        for col in support_df.columns:
+
+            n_shift = support_df[col].isna().sum()
+
+            if n_shift:
+                support_df[col] = np.roll(support_df[col], len(support_df) - 25)
+                support_df.rename(columns={col: f"{col} (shifted {n_shift} days)"}, inplace=True)
+
+        # raise NotImplementedError("Feature to be implemented.")
+        subset = support_df
 
     return subset
 
@@ -79,9 +97,9 @@ if __name__ == '__main__':
 
     df_confirmed, df_deaths, df_recovered = load_data_from_source()
 
-    df_confirmed = clean_data(df_confirmed, COUNTRY_REGION_LIST)
-    df_deaths = clean_data(df_deaths, COUNTRY_REGION_LIST)
-    df_recovered = clean_data(df_recovered, COUNTRY_REGION_LIST)
+    df_confirmed = clean_data(df_confirmed, COUNTRY_REGION_LIST, align_zero=ALIGN_ZERO)
+    df_deaths = clean_data(df_deaths, COUNTRY_REGION_LIST, align_zero=ALIGN_ZERO)
+    df_recovered = clean_data(df_recovered, COUNTRY_REGION_LIST, align_zero=ALIGN_ZERO)
 
     plot_multi(df_confirmed,  figsize=(20, 10), title="# of confirmed")
     plot_multi(df_deaths, figsize=(20, 10), title="# of deaths")
