@@ -101,7 +101,24 @@ if __name__ == '__main__':
     df_deaths = clean_data(df_deaths, COUNTRY_REGION_LIST, align_zero=ALIGN_ZERO)
     df_recovered = clean_data(df_recovered, COUNTRY_REGION_LIST, align_zero=ALIGN_ZERO)
 
+    # plot cumulative data
     plot_multi(df_confirmed,  figsize=(20, 10), title="# of confirmed")
     plot_multi(df_deaths, figsize=(20, 10), title="# of deaths")
-    plot_multi(df_recovered, figsize=(20, 10), title="# fo recovered")
+    plot_multi(df_recovered, figsize=(20, 10), title="# of recovered")
+
+    # plot diff from previous day
+    plot_multi(df_confirmed.diff(),  figsize=(20, 10), title="Daily confirmed")
+    plot_multi(df_deaths.diff(), figsize=(20, 10), title="Daily deaths")
+    plot_multi(df_recovered.diff(), figsize=(20, 10), title="Daily recovered")
+
+    # plot percentage changes from previous day
+    plot_multi(df_confirmed.pct_change(),  figsize=(20, 10), title="Daily confirmed % change")
+    plot_multi(df_deaths.pct_change(), figsize=(20, 10), title="Daily deaths % change")
+    plot_multi(df_recovered.pct_change(), figsize=(20, 10), title="Daily recovered % change")
+
+    # plot percentage changes from cumsum
+    plot_multi(df_confirmed / df_confirmed.cumsum(),  figsize=(20, 10), title="Daily confirmed % over cumsum")
+    plot_multi(df_deaths / df_deaths.cumsum(), figsize=(20, 10), title="Daily deaths % over cumsum")
+    plot_multi(df_recovered / df_recovered.cumsum(), figsize=(20, 10), title="Daily recovered % over cumsum")
+
     plt.show()
