@@ -1,8 +1,9 @@
-# Data Analysis of Novel Coronavirus COVID-19 (2019-nCoV) (WIP)
+# Data Analysis of Novel Coronavirus COVID-19 (2019-nCoV)
 
 Python script to plot and perform analysis on the updated data of Novel Coronavirus COVID-19 (2019-nCoV).  
 
 Project status: **Work In Progress**
+
 
 ## Get started
 
@@ -25,3 +26,7 @@ Run:
 * align zero-points
 * handle multi region per country
 * ...
+
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
