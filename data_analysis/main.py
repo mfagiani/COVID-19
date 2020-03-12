@@ -2,8 +2,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+FIGSIZE=(20, 10)
 COUNTRY_REGION_LIST = ["Switzerland", "Italy"]
-ALIGN_ZERO = True
+ALIGN_ZERO = False
 
 
 def load_data_from_source(source='csse'):
@@ -50,12 +52,18 @@ def clean_data(df, country_region_list=[], align_zero=False):
         for col in support_df.columns:
 
             n_shift = support_df[col].isna().sum()
+            # if support_df[col].max() > 100:
+            #     n_shift = (support_df[col] < 10).sum()
+            # else:
+            #     n_shift = support_df[col].isna().sum()
 
             if n_shift:
                 support_df[col] = np.roll(support_df[col], len(support_df) - n_shift)
                 support_df.rename(columns={col: f"{col} (shifted {n_shift} days)"}, inplace=True)
 
         # raise NotImplementedError("Feature to be implemented.")
+        support_df.reset_index(drop=True, inplace=True)
+        support_df.index.name = "Days from first case."
         subset = support_df
 
     return subset
@@ -110,23 +118,23 @@ if __name__ == '__main__':
     df_recovered = clean_data(df_recovered, COUNTRY_REGION_LIST, align_zero=ALIGN_ZERO)
 
     # plot cumulative data
-    plot_multi(df_confirmed,  figsize=(20, 10), title="# of confirmed", same_plot=ALIGN_ZERO)
-    plot_multi(df_deaths, figsize=(20, 10), title="# of deaths", same_plot=ALIGN_ZERO)
-    plot_multi(df_recovered, figsize=(20, 10), title="# of recovered", same_plot=ALIGN_ZERO)
+    plot_multi(df_confirmed, figsize=FIGSIZE, title="# of confirmed", same_plot=ALIGN_ZERO)
+    plot_multi(df_deaths, figsize=FIGSIZE, title="# of deaths", same_plot=ALIGN_ZERO)
+    plot_multi(df_recovered, figsize=FIGSIZE, title="# of recovered", same_plot=ALIGN_ZERO)
 
     # plot diff from previous day
-    plot_multi(df_confirmed.diff(),  figsize=(20, 10), title="Daily confirmed", same_plot=ALIGN_ZERO)
-    plot_multi(df_deaths.diff(), figsize=(20, 10), title="Daily deaths", same_plot=ALIGN_ZERO)
-    plot_multi(df_recovered.diff(), figsize=(20, 10), title="Daily recovered", same_plot=ALIGN_ZERO)
+    plot_multi(df_confirmed.diff(),  figsize=FIGSIZE, title="Daily confirmed", same_plot=ALIGN_ZERO)
+    plot_multi(df_deaths.diff(), figsize=FIGSIZE, title="Daily deaths", same_plot=ALIGN_ZERO)
+    plot_multi(df_recovered.diff(), figsize=FIGSIZE, title="Daily recovered", same_plot=ALIGN_ZERO)
 
     # plot percentage changes from previous day
-    plot_multi(df_confirmed.pct_change(),  figsize=(20, 10), title="Daily confirmed % change", same_plot=ALIGN_ZERO)
-    plot_multi(df_deaths.pct_change(), figsize=(20, 10), title="Daily deaths % change", same_plot=ALIGN_ZERO)
-    plot_multi(df_recovered.pct_change(), figsize=(20, 10), title="Daily recovered % change", same_plot=ALIGN_ZERO)
+    plot_multi(df_confirmed.pct_change(),  figsize=FIGSIZE, title="Daily confirmed % change", same_plot=ALIGN_ZERO)
+    plot_multi(df_deaths.pct_change(), figsize=FIGSIZE, title="Daily deaths % change", same_plot=ALIGN_ZERO)
+    plot_multi(df_recovered.pct_change(), figsize=FIGSIZE, title="Daily recovered % change", same_plot=ALIGN_ZERO)
 
     # plot percentage changes from cumsum
-    plot_multi(df_confirmed / df_confirmed.cumsum(),  figsize=(20, 10), title="Daily confirmed % over cumsum", same_plot=ALIGN_ZERO)
-    plot_multi(df_deaths / df_deaths.cumsum(), figsize=(20, 10), title="Daily deaths % over cumsum", same_plot=ALIGN_ZERO)
-    plot_multi(df_recovered / df_recovered.cumsum(), figsize=(20, 10), title="Daily recovered % over cumsum", same_plot=ALIGN_ZERO)
+    plot_multi(df_confirmed / df_confirmed.cumsum(),  figsize=FIGSIZE, title="Daily confirmed % over cumsum", same_plot=ALIGN_ZERO)
+    plot_multi(df_deaths / df_deaths.cumsum(), figsize=FIGSIZE, title="Daily deaths % over cumsum", same_plot=ALIGN_ZERO)
+    plot_multi(df_recovered / df_recovered.cumsum(), figsize=FIGSIZE, title="Daily recovered % over cumsum", same_plot=ALIGN_ZERO)
 
     plt.show()
