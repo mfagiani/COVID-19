@@ -7,22 +7,24 @@ from plotly.offline import plot
 
 
 FIGSIZE=(20, 10)
-COUNTRY_REGION_LIST = ["Switzerland", "Italy"]
+# COUNTRY_REGION_LIST = ["Switzerland", "Italy"]
+COUNTRY_REGION_LIST = ["Germany", "Italy"]
 ALIGN_ZERO = False
 PER_POPULATION = True
 
-POPULATION=dict(
+POPULATION = dict(
     Italy=60.48e6,
-    Switzerland=8.57e6
+    Switzerland=8.57e6,
+    Germany=82.79e6
 )
 
 
 def load_data_from_source(source='csse'):
 
     if source == 'csse':
-        filepath_confirmed = "../csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
-        filepath_deaths = "../csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv"
-        filepath_recovered = "../csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv"
+        filepath_confirmed = "../csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv"
+        filepath_deaths = "../csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv"
+        filepath_recovered = "../csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv"
 
     else:
         raise NotImplementedError("No other sources available yet.")
